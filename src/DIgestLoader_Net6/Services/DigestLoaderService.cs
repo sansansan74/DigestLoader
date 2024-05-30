@@ -37,10 +37,6 @@ namespace DigestLoader_Net6.Services
             {
                 throw new Exception($"Incoming Directory Not Found {directoryInfo}");
             }
-
-            //if (!Directory.Exists(_dirIncoming))
-            //    throw new Exception($"Incoming Directory Not Found {directoryInfo}");
-
         }
 
         /// <summary>
