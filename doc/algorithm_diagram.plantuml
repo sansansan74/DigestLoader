@@ -1,0 +1,37 @@
+@startuml
+start
+
+:взять файлы из папки **new**;
+
+while (Обработать каждый файл) is (ДА)    
+    group публикация cтатей
+        :Парсинг файла в набор статей\n(парсинг Xml и LINQ SELECT);
+        while(Для каждой статьи)
+            :опубликовать на интранет-сайте info;
+            note right 
+            Вызов хранимой процедуры
+            [publish_on_intranet]
+            end note
+            if (ОТРАСЛЬ = "ЖЕЛЕЗНОДОРОЖНЫЙ ТРАНСПОРТ") then (Да)
+                :опубликовать на интернет-сайте;
+                note right 
+                Вызов хранимой процедуры
+                [publish_on_internet]
+                end note
+            endif
+        endwhile
+    end group
+
+    group Переместить файл
+        :сжать файл в архив;
+        if (В процессе обработки возникли ошибки) then (ДА)
+            :переместить архив\nв папку **error**;
+        else (НЕТ)
+            :переместить архив\nв папку **success**;
+        endif
+    end group
+
+endwhile
+
+stop
+@enduml
