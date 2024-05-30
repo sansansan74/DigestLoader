@@ -24,6 +24,7 @@
 </new>
  */
 
+using System.Text;
 using System.Xml.Linq;
 
 namespace DigestLoader_Net6.Classes
@@ -88,40 +89,40 @@ namespace DigestLoader_Net6.Classes
         private static int GetFirstIntry(string strBody, string findSymbols) => 
             findSymbols.Select(ch => strBody.LastIndexOf(ch)).Min();
 
+
+        const string sourcesTableHeader = 
+                "<table class=gr-tb border=0 cellpadding=0 cellspacing=2><tr><th>"
+                + "Источник</th><th>Дата</th><th>Наименование материала</th></tr>";
+
         public static string ProcessSources(XElement sources)
         {
-            string str = "";
-            if (sources != null)
+            var sourcesList = sources?.Elements("source").ToList() ?? [];
+            if (sourcesList.Count == 0)
+                return string.Empty;
+
+            var sb = new StringBuilder(sourcesTableHeader);
+
+            foreach (XElement source in sources.Elements("source"))
             {
-                foreach (XElement source in sources.Elements("source"))
-                {
-                    str += String.Format(
-                        "<tr><td>{0}</td><td>{1}</td><td>{2}</td></tr>",
-                        source?.Attribute("name")?.Value ?? String.Empty,
-                        source?.Attribute("date")?.Value ?? String.Empty,
-                        source?.Value); 
-                }
+                sb.AppendFormat(
+                    "<tr><td>{0}</td><td>{1}</td><td>{2}</td></tr>",
+                    source?.Attribute("name")?.Value ?? String.Empty,
+                    source?.Attribute("date")?.Value ?? String.Empty,
+                    source?.Value);
             }
-            if (str != "")
-                str = "<table class=gr-tb border=0 cellpadding=0 cellspacing=2><tr><th>"
-                        + "Источник</th><th>Дата</th><th>Наименование материала</th></tr>" 
-                        + str + "</table>";
-            return str;
+
+            sb.Append("</table>");
+            return sb.ToString();
         }
 
         public static string ProcessClassifies(XElement xmlnode)
         {
-            string str = "";
-            foreach (XElement childNode in xmlnode.Elements())
-            {
-                if (childNode.Name == "classify")
-                {
-                    if (str != "")
-                        str += "|#|";
-                    str = str + $"{childNode.Attribute("name")?.Value}={childNode.Value}";
-                }
-            }
-            return str;
+            var valuesList = xmlnode.Elements()
+                .Where(x => x.Name == "classify")
+                .Select(x => $"{x.Attribute("name")?.Value}={x.Value}")
+                .ToList();
+
+            return string.Join("|#|", valuesList);
         }
 
         /// <summary>
@@ -145,19 +146,17 @@ namespace DigestLoader_Net6.Classes
 
         public string GetBodyWithTag(string tagName)
         {
-            IEnumerable<string>? paragrafs = this.Body?.Select(
-                b => $"<{tagName}>{b}</{tagName}>") ?? new List<string>();
+            if (Body == null)
+                return string.Empty;
+
+            var paragrafs = Body.Select(b => $"<{tagName}>{b}</{tagName}>");
             return string.Concat(paragrafs);
-            // + "<p>&nbsp;</p>" + strSources
         }
 
         public string GetBodyForNbktrans()
         {
-            IEnumerable<string>? paragrafs = this.Body?.Select(
-                b => $"<p>{b}</p>") ?? new List<string>();
-            string body = string.Concat(paragrafs); 
+            string body = GetBodyWithTag("p"); 
             return string.Concat(body, "<p>&nbsp;</p>", Sources);
-            // + "<p>&nbsp;</p>" + strSources
         }
     }
 }

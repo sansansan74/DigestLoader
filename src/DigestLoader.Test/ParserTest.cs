@@ -16,8 +16,6 @@ namespace DigestLoader.Test
             
             digest.Init(@"TestData\16.05.2024.xml");
 
-
-
             Assert.That(digest.Articles, Is.Not.Empty);
             Assert.That(digest.Articles.Count == 21);
         }

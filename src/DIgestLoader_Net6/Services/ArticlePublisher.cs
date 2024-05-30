@@ -61,7 +61,7 @@ namespace DigestLoader_Net6.Services
             if (_publishOnNpkTrans && article.HasRailTransport())
             {
                 _npktransRepository.Publish(article);
-                _logger.LogTrace($"Статья опубликована на npktrans.ru, {article.Title}");
+                _logger.LogTrace($"Статья опубликована на интернет-портале, {article.Title}");
             }
         }
 
