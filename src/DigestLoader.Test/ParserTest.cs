@@ -10,17 +10,16 @@ namespace DigestLoader.Test
         }
 
         [Test]
-        public void Test1()
+        public void TestParse()
         {
             Digest digest = new();
             
-            digest.Init(@"D:\Projects\DigestLoader\src\Data\new\13.11.2023.xml");
+            digest.Init(@"TestData\16.05.2024.xml");
 
 
-            var titles = digest.Articles.Select(a => a.Title).ToList();
-            var rt = digest.Articles.Select(a => a.HasRailTransport()).ToList();
 
             Assert.That(digest.Articles, Is.Not.Empty);
+            Assert.That(digest.Articles.Count == 21);
         }
     }
 }

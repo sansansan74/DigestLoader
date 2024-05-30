@@ -18,10 +18,8 @@ namespace DigestLoader_Net6.Classes
         /// <param name="fileName">Путь к xml-файлу</param>
         public void Init(string fileName)
         {
-            // Тут падает по кодировке XML
-            // Под отладчиком на моей машине работает
             XDocument xdoc = XDocument.Load(fileName);
-            var xmlArticles = xdoc.Element("digest")?.Elements("new").ToList() ?? [];
+            List<XElement> xmlArticles = xdoc.Element("digest")?.Elements("new").ToList() ?? [];
             Articles = xmlArticles.Select(a => new Article(a)).ToList();
         }
     }

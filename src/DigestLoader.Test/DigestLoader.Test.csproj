@@ -27,4 +27,10 @@
     <ProjectReference Include="..\DIgestLoader_Net6\DigestLoader_Net6.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="TestData\16.05.2024.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

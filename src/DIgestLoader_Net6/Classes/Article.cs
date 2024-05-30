@@ -95,7 +95,7 @@ namespace DigestLoader_Net6.Classes
             {
                 foreach (XElement source in sources.Elements("source"))
                 {
-                    str = str + String.Format(
+                    str += String.Format(
                         "<tr><td>{0}</td><td>{1}</td><td>{2}</td></tr>",
                         source?.Attribute("name")?.Value ?? String.Empty,
                         source?.Attribute("date")?.Value ?? String.Empty,
