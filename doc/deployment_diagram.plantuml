@@ -1,0 +1,43 @@
+@startuml
+
+top to bottom direction
+
+node "Apphost1\nОС Windows" as host1 {
+    [Планировщик задач] as task 
+    [MailLoader] as mailLoader
+    
+    folder "Сетевая папка \\\\apphost1\MailLoaderData\Digest" {
+      [new] as folder
+      [success] as folderOk
+      [error] as folderError
+    }
+}
+
+node "Apphost2\nОС Windows" as host2 {
+    [Планировщик задач] as task2 
+    [Сервис "DigestPublish"] as digestPublish
+}
+
+node "IntranetDbServer" {
+database "MS SQL Server" AS DB1 {
+  [intranet_site_database] AS db_info
+}
+}
+
+node "InternetDbServer" {
+  database "MS SQL Server" AS DB2 {
+    [internet_site_database] AS db_portal
+  }
+}
+
+ task --> mailLoader: Запускает\nпо расписанию
+ mailLoader --> folder: "Положить вложения xml"
+ task2 -right-> digestPublish: Запускает\nпо расписанию
+ digestPublish --> folder: Взять\n файлы
+ digestPublish -> digestPublish: Сгенерировать статьи
+ digestPublish --> db_info: публиковать на Интранет-сайте
+ digestPublish --> db_portal: публиковать на Интернет-сайте
+ digestPublish -up-> folderOk: Сохранить\n успешно\n обработанные
+ digestPublish -up-> folderError: Сохранить\n обработанные\n c ошибками
+
+@enduml
