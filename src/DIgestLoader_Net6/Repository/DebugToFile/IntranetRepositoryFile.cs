@@ -1,23 +1,24 @@
 ﻿using DigestLoader_Net6.Classes;
+using DigestLoader_Net6.Repository.Dto;
 using DigestLoader_Net6.Repository.Interfaces;
 using Microsoft.Extensions.Configuration;
 
 namespace DigestLoader_Net6.Repository
 {
-    internal class InfoRepositoryFile : IInfoRepository
+    internal class IntranetRepositoryFile : IIntranetRepository
     {
         private readonly IConfiguration _config;
-        public InfoRepositoryFile(IConfiguration config)
+        public IntranetRepositoryFile(IConfiguration config)
         {
             _config = config;
         }
 
-        public void Publish(Article article)
+        public void Publish(ArticleIntranetDTO article)
         {
-            var path = _config["Folders:Info"];
+            var path = _config["Folders:Intranet"];
             var fileName = Path.Combine(path, $"{Guid.NewGuid}.txt");
 
-            File.AppendAllText(fileName, $"Title:{article.Title}\r\nBody:{article.GetBodyWithTag("para")}");
+            File.AppendAllText(fileName, $"Title:{article.title}\r\nBody:{article.body}");
         }
     }
 }

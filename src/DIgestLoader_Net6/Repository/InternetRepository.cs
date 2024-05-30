@@ -1,5 +1,5 @@
 ﻿/*
-Репозиторий публикует новость на сайте npktrans.ru
+Репозиторий публикует новость на сайте Internet
  
 Сигнатура вызываемой хранимой процедуры
 proc [dbo].[san_add_digest_new]
@@ -9,37 +9,37 @@ proc [dbo].[san_add_digest_new]
 	@body 		text		-- тело новости
 */
 using Dapper;
-using DigestLoader_Net6.Classes;
+using DigestLoader_Net6.Repository.Dto;
 using DigestLoader_Net6.Repository.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace DigestLoader_Net6.Repository
 {
-    internal class NpktransRepository : MsSqlRepositoryBase, INpktransRepository
+    internal class InternetRepository : MsSqlRepositoryBase, IInternetRepository
     {
-        public NpktransRepository(IConfiguration config, ILogger logger)
+        public InternetRepository(IConfiguration config, ILogger logger)
             : base(logger)
         {
-            var connection = config.GetConnectionString("NPKTRANS_QUERY_STRING");
+            var connection = config.GetConnectionString("INTERNET_QUERY_STRING");
             SetConnectionString(connection);
         }
         
 
-        public void Publish(Article article)
+        public void Publish(ArticleInternetDTO article)
         {
 
-            Exec("Публикуем новость на сайте npktrans.ru [dbo].san_add_digest_new", con => {
+            Exec("Публикуем новость на интернет сайте [dbo].san_add_digest_new", con => {
                 
                 con.Execute(
                     sql: "[dbo].san_add_digest_new",
                     commandType: System.Data.CommandType.StoredProcedure,
                     param: new
                     {
-                        new_date = article.Date,
-                        title = article.Title,
-                        annotation= article.GetAnnotation(),
-                        body = article.GetBodyForNbktrans()
+                        article.new_date,
+                        article.title,
+                        article.annotation,
+                        article.body
                     });
             });
         }

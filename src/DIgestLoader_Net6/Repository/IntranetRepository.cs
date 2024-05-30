@@ -1,5 +1,5 @@
 ﻿/*
-Репозиторий публикует новость на сайте info
+Репозиторий публикует новость на сайте Intranet
 
 Сигнатура вызываемой хранимой процедуры
 proc [dbo].[san_load_new]
@@ -11,34 +11,35 @@ proc [dbo].[san_load_new]
 */
 using Dapper;
 using DigestLoader_Net6.Classes;
+using DigestLoader_Net6.Repository.Dto;
 using DigestLoader_Net6.Repository.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace DigestLoader_Net6.Repository
 {
-    public class InfoRepository : MsSqlRepositoryBase, IInfoRepository
+    public class IntranetRepository : MsSqlRepositoryBase, IIntranetRepository
     {
-        public InfoRepository(IConfiguration config, ILogger logger)
+        public IntranetRepository(IConfiguration config, ILogger logger)
             : base(logger)
         {
-            var connection = config.GetConnectionString("INFO_QUERY_STRING");
+            var connection = config.GetConnectionString("INTRANET_QUERY_STRING");
             SetConnectionString(connection);
         }
 
-        public void Publish(Article article)
+        public void Publish(ArticleIntranetDTO article)
         {
-            Exec("Публикуем новость на сайте info/ [dbo].san_load_new", con => {
+            Exec("Публикуем новость на сайте Intranet/ [dbo].san_load_new", con => {
                 con.Execute(
                     sql: "[dbo].san_load_new",
                     commandType: System.Data.CommandType.StoredProcedure,
                     param: new
                     {
-                        new_date = article.Date,
-                        source = article.Sources,
-                        classify = article.Classifies,
-                        title = article.Title,
-                        body = article.GetBodyWithTag("para")
+                        new_date = article.new_date,
+                        source = article.source,
+                        classify = article.classify,
+                        title = article.title,
+                        body = article.body
                     }); 
             });
         }

@@ -8,12 +8,12 @@ proc [dbo].[san_load_new]
     @body 		text		-- тело новости
 */
 
-using DigestLoader_Net6.Classes;
+using DigestLoader_Net6.Repository.Dto;
 
 namespace DigestLoader_Net6.Repository.Interfaces
 {
-    public interface IInfoRepository
+    public interface IIntranetRepository
     {
-        public void Publish(Article article);
+        public void Publish(ArticleIntranetDTO article);
     }
 }

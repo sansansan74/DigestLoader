@@ -17,8 +17,8 @@ namespace DigestLoader_Net6.Infrastructure
         {
             return new ServiceCollection()
                 .AddTransient<ArticlePublisher>()
-                .AddTransient<IInfoRepository, InfoRepository>()
-                .AddTransient<INpktransRepository, NpktransRepository>()
+                .AddTransient<IIntranetRepository, IntranetRepository>()
+                .AddTransient<IInternetRepository, InternetRepository>()
                 .AddTransient<DigestLoaderService>()
                 .AddLogging(loggingBuilder =>
                 {
