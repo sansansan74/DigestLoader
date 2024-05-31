@@ -1,13 +1,16 @@
-﻿// Сервис читсет все файлы xml из указанной директории
-// и передает их на олбработку сервису ArticlePublisher
-
-using DigestLoader_Net6.Repository;
+﻿using DigestLoader_Net6.Repository;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace DigestLoader_Net6.Services
 {
-    internal class DigestLoaderService
+    /// <summary>
+    /// Service for loading digest files
+    /// 1. Read all xml files from the specified directory
+    /// 2. Publish each file
+    /// 3. Move processed files to the appropriate directory: susccess or error
+    /// </summary>
+    public class DigestLoaderService
     {
         private readonly IConfiguration _config;
         private readonly ILogger _logger;
@@ -40,7 +43,8 @@ namespace DigestLoader_Net6.Services
         }
 
         /// <summary>
-        /// Вычитывание файлов из папки и вызов обработки
+        /// Read all xml files from the specified directory
+        /// Process each file
         /// </summary>
         public void ProcessXmlFiles()
         {
